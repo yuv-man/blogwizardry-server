@@ -11,19 +11,19 @@ class Server {
 
     constructor() {
         const app = express();
+        const allowedOrigins = ['https://blogwizardry.onrender.com', 'http://localhost:8080'];
 
         const corsOptions = process.env.NODE_ENV === 'development' 
             ? { origin: 'http://localhost:8080', credentials: true } 
             : { 
                 origin: function (origin, callback) {
-                    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
-                    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-                        callback(null, true);
+                    if (!origin || allowedOrigins.includes(origin)) {
+                      callback(null, true);
                     } else {
-                        callback(new Error('Not allowed by CORS'));
+                      callback(new Error('Not allowed by CORS'));
                     }
-                },
-                credentials: true 
+                  },
+                  credentials: true,
             };
         
         app.use(cors(corsOptions));
