@@ -14,7 +14,17 @@ class Server {
 
         const corsOptions = process.env.NODE_ENV === 'development' 
             ? { origin: 'http://localhost:8080', credentials: true } 
-            : { origin: process.env.ALLOWED_ORIGINS?.split(',') || [], credentials: true }; // Restricted in production
+            : { 
+                origin: function (origin, callback) {
+                    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
+                    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+                        callback(null, true);
+                    } else {
+                        callback(new Error('Not allowed by CORS'));
+                    }
+                },
+                credentials: true 
+            };
         
         app.use(cors(corsOptions));
         this.app = app;
