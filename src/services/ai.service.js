@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import logger from '../utils/logger.js';
+import { enumLanguage } from '../../enum/enumLanguage.js';
 
 const generateBlogPost = async (topic, style, keywords, language) => {
   try {
@@ -7,7 +8,7 @@ const generateBlogPost = async (topic, style, keywords, language) => {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" }); // Use latest model version
     
     // Update prompt to explicitly request a structured format
-    const prompt = `Write a blog post in ${language} about ${topic} in ${style} style. 
+    const prompt = `Write a blog post in ${enumLanguage[language]} about ${topic} in ${style} style. 
     Include the following keywords: ${keywords}
 
     Please follow this exact structure:
