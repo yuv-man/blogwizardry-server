@@ -3,16 +3,20 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 import logger from './utils/logger.js';
 import router from './router.js'
+import dotenv from 'dotenv';
 
 // Initialize express app
+dotenv.config();
 class Server {
 
     constructor() {
         const app = express();
-        app.use(cors({
-          origin: 'http://localhost:8080',
-          credentials: true
-        }));
+
+        const corsOptions = process.env.NODE_ENV === 'development' 
+            ? { origin: 'http://localhost:8080', credentials: true } 
+            : { origin: process.env.ALLOWED_ORIGINS?.split(',') || [], credentials: true }; // Restricted in production
+        
+        app.use(cors(corsOptions));
         this.app = app;
         
         // Middleware setup
@@ -22,9 +26,6 @@ class Server {
 
     setupMiddleware() {
         // Basic middleware
-        // const corsOptions = process.env.NODE_ENV === 'development' 
-        //     ? { origin: true, credentials: true } // Allow all origins in development
-        //     : { origin: process.env.ALLOWED_ORIGINS?.split(',') || [] }; // Restricted in production
         
         // this.app.use(cors(corsOptions));
         this.app.use(express.json());

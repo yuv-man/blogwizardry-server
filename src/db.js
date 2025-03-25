@@ -7,7 +7,7 @@ export const ObjectId = mongoose.Schema.Types.ObjectId;
 // open db connection
 export const openDbConnection = async () => {
   try {
-    const uri = process.env.MONGO_URL;
+    const uri = process.env.NODE_ENV === 'production' ? process.env.MONGO_URL_PROD : process.env.MONGO_URL_LOCAL;
     
     if (!uri) {
       logger.error('MONGO_URL environment variable is not defined');
