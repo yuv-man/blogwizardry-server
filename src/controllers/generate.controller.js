@@ -6,7 +6,7 @@ import logger from '../utils/logger.js';
 // @access  Private
 const generatePost = async (req, res) => {
   try {
-    const { topic, style, keywords } = req.body;
+    const { topic, style, keywords, language } = req.body;
     
     if (!topic) {
       return res.status(400).json({
@@ -19,7 +19,7 @@ const generatePost = async (req, res) => {
     const blogStyle = style || 'informative';
     
     // Generate blog post
-    const { title, excerpt, content } = await aiService.generateBlogPost(topic, blogStyle, keywords);
+    const { title, excerpt, content } = await aiService.generateBlogPost(topic, blogStyle, keywords, language);
     
     res.status(200).json({
       status: 'success',
